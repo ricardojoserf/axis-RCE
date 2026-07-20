@@ -2,9 +2,9 @@
 
 This exploit chains CVE‑2025‑30026 (Authentication bypass) with CVE‑2025‑30023 (Insecure deserialization) to achieve unauthenticated RCE on Axis Camera Station software. It bypasses the login mechanism and delivers malicious serialized payloads that trigger arbitrary command execution, giving the attacker full control over the target machine.
 
-Both vulnerabilities affect Axis Camera Station Pro versions prior to 6.9 and Axis Camera Station versions before 5.58. 
+Both vulnerabilities affect Axis Camera Station Pro versions before 6.9 and Axis Camera Station versions before 5.58. 
 
-It is based on this Claroty's blog: [https://claroty.com/team82/research/turning-camera-surveillance-on-its-axis](https://claroty.com/team82/research/turning-camera-surveillance-on-its-axis).
+It is based on Claroty's blog ["Turning Camera Surveillance on its Axis"](https://claroty.com/team82/research/turning-camera-surveillance-on-its-axis), which explains how the protocol and the vulnerabilities work.
 
 
 <br>
@@ -83,7 +83,7 @@ A Request is a JSON object with a single `Request` key. The format to exploit th
 }
 ```
 
-The value of the "clientInformationDto" field can be obtained using Ysoserial.net with the gadget WindowsIdentity, which looks quite stable to exploit this vulnerability (other gadgets crash the service):
+The value of the `clientInformationDto` field can be obtained using Ysoserial.net with the gadget `WindowsIdentity`, which looks quite stable to exploit this vulnerability (other gadgets crash the service):
 
 ```
 ysoserial.exe -g WindowsIdentity -f Json.Net -c "ping -n 3 10.0.0.4" -o raw
@@ -95,8 +95,6 @@ ysoserial.exe -g WindowsIdentity -f Json.Net -c "ping -n 3 10.0.0.4" -o raw
 ---
 
 ## How the protocol works
-
-The exploit speaks the Axis Camera Station proprietary remoting protocol over its HTTP streaming port (TCP `55752`), performing the full transport + cryptographic handshake and then exchanges application-level `Axis.Remoting` JSON messages over the resulting encrypted channel.
 
 AXIS Camera Station wraps a stateful binary protocol on top of HTTP. Instead of one request/response per connection, it opens two long-lived channels and streams framed messages over them until the connection closes.
 
@@ -148,8 +146,8 @@ openssl genrsa -out client_priv.pem 2048
 
 ## Notes
 
-- Tested on versions 5.57.27610 and Version 5.57.33556 running on Windows 11.
+- Tested on versions `5.57.27610` and `5.57.33556` running on Windows 11.
 
-- This is a research/testing tool, not a supported Axis product, and is not affiliated with or endorsed by Axis Communications.
+- Deserialization attacks can crash the service if unstable gadgets or inappropriate parameters are used, so always test in controlled environments.
 
-- Deserialization attacks can crash your devices, so please use it with caution and in controlled environments. 
+- This script is provided solely for educational and authorized testing purposes... use at your own risk!
