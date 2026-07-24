@@ -88,10 +88,20 @@ The value of the `clientInformationDto` field can be obtained using Ysoserial.ne
 ysoserial.exe -g WindowsIdentity -f Json.Net -c "ping -n 3 10.0.0.4" -o raw
 ```
 
+<br>
+
+---
+
+## Extra loot
+
+Once you have access to the Windows machine, you have access to the `.FDB` databases which contain the credentials to connect to the different devices. These values are encrypted using a weak AES implementation, which you can decrypt in minutes or immediately using the host's volume serial number using this script I created: [acs-decrypt](https://github.com/ricardojoserf/acs_decrypt)
+
 
 <br>
 
 ---
+
+
 
 ## How the protocol works
 
