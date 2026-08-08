@@ -94,7 +94,7 @@ ysoserial.exe -g WindowsIdentity -f Json.Net -c "ping -n 3 10.0.0.4" -o raw
 
 ## Extra loot
 
-Once you have access to the Windows machine, you have access to the `.FDB` databases which contain the credentials to connect to the different devices. These are encrypted using a weak AES implementation, which you can decrypt immediately using the host's volume serial number or brute-force it in minutes with a GPU using the script [acs-decrypt](https://github.com/ricardojoserf/acs_decrypt).
+Once you have access to the Windows machine, you have access to the `.FDB` databases which contain the credentials to connect to the different devices. These are encrypted using a weak AES implementation, which you can decrypt immediately using the host's volume serial number or brute-force it in minutes with a GPU. You can use the script in this repository to exploit it: [CVE-2026-63286](https://github.com/ricardojoserf/CVE-2026-63286).
 
 
 <br>
