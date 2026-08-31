@@ -1,4 +1,4 @@
-# CVE-2025-30026 + CVE-2025-30023 chain
+# CVE-2025-30026 + CVE-2025-30023: Unauth RCE
 
 This exploit chains CVE‑2025‑30026 (Authentication bypass) with CVE‑2025‑30023 (Insecure deserialization) to achieve unauthenticated RCE on Axis Camera Station software. It bypasses the login mechanism and delivers malicious serialized payloads that trigger arbitrary command execution, giving the attacker full control over the target machine.
 
